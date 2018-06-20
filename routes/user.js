@@ -14,22 +14,41 @@ route.get('/login', (req,res) => {
     res.render('login', {message: req.flash('loginMsg')});
 })
 route.get('/logout', (req, res)=>{
-    req.logout();
-    req.flash('homePgMsg', 'Successfully Logged Out!');
+    if(req.user){
+        req.logout();
+        req.flash('homePgMsg', 'Successfully Logged Out!');
+    }
     res.redirect('/');
 });
 route.get('/profile', auth.isLoggedIn, (req,res,next) => {
     models.User
         .findOne({_id: req.user._id})
         .then(user => {
-            res.render('profile', {user});
+            res.render('profile', {user, message: req.flash('editSuccess')});
         })
         .catch(err => {
             return next(err);
         })
 })
 route.get('/edit-profile', auth.isLoggedIn, (req,res,next) =>{
-    res.render('editProfile.ejs', {message: req.flash('editSuccess')});
+    res.render('editProfile.ejs');
+})
+route.post('/edit-profile', auth.isLoggedIn, (req,res,next) => {
+    models.User
+        .findById(req.user._id)
+        .then(user => {
+            user.name = req.body.name;
+            user.address = req.body.address;
+            return user.save();
+        })
+        .then(user => {
+            req.flash('editSuccess', 'Successfully edited your profile!');
+            res.redirect('/profile');
+        })
+        .catch(err => {
+            return next(err);
+            res.redirect('/profile');
+        })
 })
 route.post('/login', passport.authenticate('local', {
     successRedirect: '/',
