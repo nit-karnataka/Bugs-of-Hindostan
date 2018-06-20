@@ -1,0 +1,25 @@
+{
+  "name": "purpletee",
+  "version": "1.0.0",
+  "description": "ecommerce website for tshirts",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mr-Maverick/PurpleTee.git"
+  },
+  "author": "Sumit",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mr-Maverick/PurpleTee/issues"
+  },
+  "homepage": "https://github.com/Mr-Maverick/PurpleTee#readme",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "mongoose": "^5.1.6"
+  }
+}
