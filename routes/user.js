@@ -28,6 +28,9 @@ route.get('/profile', auth.isLoggedIn, (req,res,next) => {
             return next(err);
         })
 })
+route.get('/edit-profile', auth.isLoggedIn, (req,res,next) =>{
+    res.render('editProfile.ejs', {message: req.flash('editSuccess')});
+})
 route.post('/login', passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/login',
@@ -38,8 +41,10 @@ route.post('/signup', (req,res,next) => {
     var user = new models.User();
     
     user.name = req.body.name;
+    user.address = req.body.address;
     user.password = req.body.password;
     user.email = req.body.email;
+    user.picture = user.gravatar();
 
     models.User
         .findOne({email: req.body.email})
