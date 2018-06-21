@@ -22,7 +22,17 @@
                 <%= message%>
             </div>
         <% } %>
-
+        <% if(successMsg.length){ %>
+            <div class="alert alert-success alert-dismissable fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">
+                        &times; <!--  x button -->
+                    </span>
+                </button>
+                <%= successMsg%>
+            </div>
+        <% } %>
+        
         <h2>Login</h2>
         <form action="/login" method="post">
             <div class="form-group">
