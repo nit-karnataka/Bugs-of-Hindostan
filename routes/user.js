@@ -1,17 +1,55 @@
 const route = require('express').Router();
+const crypto = require('crypto');
+const fs = require('fs');
 const passport = require('passport');
 const models = require('../models');
 const auth = require('../utils/auth.js');
-const multer = require('multer');
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, 'public_static/uploads')
-    },
-    filename: (req, file, cb) => {
-      cb(null, Date.now() + file.originalname)
+const { upload, cloudinary } = require("../utils/images");
+
+const uploadImageandCreateUser = req => {
+    if (req.file) {
+        return cloudinary.uploader.upload(req.file.path)
+            .then(result => {
+                fs.unlink(req.file.path);
+                return models.User.create({
+                    ...req.body,
+                    picture: result.url
+                })
+            });
+    } else {
+        let size = 200;
+        let md5 = crypto.createHash('md5').update(req.body.email).digest('hex');
+        let url = 'https://gravatar.com/avatar/' + md5 + '?s=' + size + '&d=retro';
+
+        return models.User.create({
+            ...req.body,
+            orientation: 'gravatar',
+            picture: url
+        });
     }
-});
-const upload = multer({storage: storage});
+};
+
+route.post('/signup', upload.single('profilePic'), (req,res,next) => {
+     
+    models.User
+        .findOne({email: req.body.email})
+        .then(existingUser =>{
+            if(existingUser){
+                req.flash('errors', 'Email already exists!');
+                return res.redirect('/signup');
+            } else {
+                return uploadImageandCreateUser(req);
+            }
+        })
+        .then(user=> {
+            res.redirect('/login');
+        })
+        .catch(err=> {
+            console.log(`Error: ${err}`);
+            res.redirect('/signup');
+        })
+})
+
 
 route.get('/signup', (req,res) => {
     if(req.user)
@@ -66,32 +104,5 @@ route.post('/login', passport.authenticate('local', {
     successFlash: true,
     failureFlash: true
 }))
-route.post('/signup', upload.single('profilePic'), (req,res,next) => {
-    var user = new models.User();
-   
-    user.name = req.body.name;
-    user.address = req.body.address;
-    user.password = req.body.password;
-    user.email = req.body.email;
-    user.picture = user.gravatar();
-
-    models.User
-        .findOne({email: req.body.email})
-        .then(existingUser =>{
-            if(existingUser){
-                req.flash('errors', 'Email already exists!');
-                return res.redirect('/signup');
-            } else {
-                return user.save();
-            }
-        })
-        .then(user=> {
-            res.redirect('/login');
-        })
-        .catch(err=> {
-            console.log(`Error: ${err}`);
-            res.redirect('/signup');
-        })
-})
 
 module.exports = route;
