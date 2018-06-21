@@ -1,7 +1,17 @@
 const route = require('express').Router();
-const models = require('../models');
 const passport = require('passport');
+const models = require('../models');
 const auth = require('../utils/auth.js');
+const multer = require('multer');
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, 'public_static/uploads')
+    },
+    filename: (req, file, cb) => {
+      cb(null, Date.now() + file.originalname)
+    }
+});
+const upload = multer({storage: storage});
 
 route.get('/signup', (req,res) => {
     if(req.user)
@@ -56,9 +66,9 @@ route.post('/login', passport.authenticate('local', {
     successFlash: true,
     failureFlash: true
 }))
-route.post('/signup', (req,res,next) => {
+route.post('/signup', upload.single('profilePic'), (req,res,next) => {
     var user = new models.User();
-    
+   
     user.name = req.body.name;
     user.address = req.body.address;
     user.password = req.body.password;
