@@ -10,3 +10,4 @@ Contains flash messages for login, logout, signup, successful edit, etc.
 
 Added user profile, via multer and cloudinary.
 Remove and edit profile pic also.
+Contains flash messages for login, logout, signup, successful edit, etc.
