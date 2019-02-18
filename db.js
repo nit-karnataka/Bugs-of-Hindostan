@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const CONFIG = require("./config");
 
 mongoose
-	.connect(`mongodb://${CONFIG.DB.HOST}:${CONFIG.DB.PORT}/${CONFIG.DB.NAME}`)
+	.connect(`mongodb://${CONFIG.DB.HOST}:${CONFIG.DB.PORT}/${CONFIG.DB.NAME}`, { useNewUrlParser: true })
 	.then(() => {
 		console.log("Database Ready for use!");
 	})

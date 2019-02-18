@@ -5,6 +5,10 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const flash = require('express-flash');
 const MongoStore = require('connect-mongo')(session);
+//const { trieFunctions, Trie } = require('./utils/trieClass');
+const trieFunctions = require('./utils/trieClass').trieFunctions;
+const Node = require('./utils/trieClass').Node
+const Trie = require('./utils/trieClass').Trie
 
 const app = express();
 
@@ -33,11 +37,50 @@ app.use(passport.session());
 
 
 app.use((req, res, next)=>{
-    res.locals.user= req.user;
+    res.locals.user = req.user;
     next();
 });
 
 app.use('/', require('./routes'));
+
+console.log("abc")
+console.log(trieFunctions);
+console.log("abc")
+
+
+// myTrie = new Trie()
+// trieFunctions.add(myTrie.root, 'ball'); 
+// trieFunctions.add(myTrie.root,'bat'); 
+// trieFunctions.add(myTrie.root, 'doll'); 
+// console.log(trieFunctions.isWord(myTrie.root, 'doll'))
+// console.log(trieFunctions.isWord(myTrie.root, 'dor'))
+// console.log(trieFunctions.isWord(myTrie.root, 'dorf'))
+// console.log(trieFunctions.print(myTrie.root))
+
+// models.Pdf.create({
+//     name: 'first',
+//     dateUploaded: Date.now(),
+//     trie: myTrie
+// })
+// .then(pdf => {
+//     console.log(pdf)
+// })
+// .catch(err => {
+//     console.log("Error aagya");
+//     console.log(err);
+// })
+
+// console.log("Hello");
+
+// models.Pdf.findOne({})
+// .then(pdf => {
+//     console.log(pdf);
+//     console.log(trieFunctions.isWord(pdf.trie.root, 'dolll'))
+//     console.log(trieFunctions.isWord(pdf.trie.root, 'doll'))
+// })
+// .catch(err => {
+//     console.log(err);
+// })
 
 app.listen(CONFIG.SERVER.PORT, ()=>{
     console.log(`Server Started at http://localhost:${CONFIG.SERVER.PORT}/`);

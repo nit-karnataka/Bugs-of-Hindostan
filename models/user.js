@@ -3,15 +3,17 @@ const bcrypt = require('bcrypt-nodejs');
 
 const userSchema = mongoose.Schema({
     email : {type: String, unique: true, lowercase: true},
+    teacherEmail: {type: String, lowercase: true},
     password : String, 
     name: String,
-    picture: String,
-    orientation: {type: String, default: 'off'},
-    address: String,
-    history: [{
-        date: Date,
-        paid: {type: Number, default: 0},
-    }]
+    pastQueries: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'query'
+    }],
+    studentOrTeacher: {
+        type: Boolean, 
+        default: false
+    }
 }, {
     usePushEach : true
 });

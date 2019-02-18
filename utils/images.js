@@ -1,6 +1,7 @@
 const cloudinary = require('cloudinary');
 const multer = require('multer');
 const { CLOUDINARY } = require('../config');
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
       cb(null, 'public_static/uploads')
