@@ -79,6 +79,10 @@ app.use('/', require('./routes'));
 //     console.log(err);
 // })
 
+app.get('/query', (req,res)=>{
+    res.render('query');
+})
+
 app.listen(CONFIG.SERVER.PORT, ()=>{
     console.log(`Server Started at http://localhost:${CONFIG.SERVER.PORT}/`);
 })
