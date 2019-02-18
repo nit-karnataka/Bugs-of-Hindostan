@@ -5,10 +5,8 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const flash = require('express-flash');
 const MongoStore = require('connect-mongo')(session);
-//const { trieFunctions, Trie } = require('./utils/trieClass');
-const trieFunctions = require('./utils/trieClass').trieFunctions;
-const Node = require('./utils/trieClass').Node
-const Trie = require('./utils/trieClass').Trie
+const trieFunctions = require('./utils/trieFunctions');
+const Trie = require('./utils/Trie');
 
 const app = express();
 
@@ -43,9 +41,9 @@ app.use((req, res, next)=>{
 
 app.use('/', require('./routes'));
 
-console.log("abc")
-console.log(trieFunctions);
-console.log("abc")
+// console.log("abc")
+// console.log(trieFunctions);
+// console.log("abc")
 
 
 // myTrie = new Trie()
@@ -70,13 +68,12 @@ console.log("abc")
 //     console.log(err);
 // })
 
-// console.log("Hello");
-
 // models.Pdf.findOne({})
 // .then(pdf => {
 //     console.log(pdf);
 //     console.log(trieFunctions.isWord(pdf.trie.root, 'dolll'))
 //     console.log(trieFunctions.isWord(pdf.trie.root, 'doll'))
+//     console.log(trieFunctions.isWord(pdf.trie.root, 'ba'))
 // })
 // .catch(err => {
 //     console.log(err);

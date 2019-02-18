@@ -1,16 +1,14 @@
-var treeFunctions = {}
+const Node = require('./Node');
+const Trie = require('./Trie');
 
-var Node = function() {
-	this.keys = new Map();
-	this.end = false;
-};
+const treeFunctions = {}
 
 treeFunctions.add = function(node, input) {
     if (input.length == 0) {
         node.end = true;
         return;
     } else if (!node.keys.hasOwnProperty(input[0])) {
-        node.keys.set(input[0], new Node());
+        node.keys.set(String(input[0]), new Node());
         return treeFunctions.add(node.keys.get(input[0]), input.substr(1));
     } else {
         return treeFunctions.add(node.keys.get(input[0]), input.substr(1));
@@ -20,14 +18,18 @@ treeFunctions.add = function(node, input) {
 treeFunctions.isWord = function(root, word) {
     var node = root;
     while (word.length > 1) {
-        if (!node.keys.has(word[0])) {
+        if (!node.keys.hasOwnProperty(word[0])) {
             return false;
         } else {
-            node = node.keys.get(word[0]);
+            node = node.keys[word[0]];
             word = word.substr(1);
         };
     };
-    return (node.keys.has(word) && (node.keys.get(word) === true)) ? true : false;
+    if(node.keys.hasOwnProperty(word)) {
+        node = node.keys[word];
+        return (node.end === true);
+    }
+    return false;
 };
 
 treeFunctions.print = function(root) {
@@ -37,7 +39,7 @@ treeFunctions.print = function(root) {
             for (var varter of node.keys.keys()) {
                 search(node.keys.get(varter), string.concat(varter));
             };
-            if (node.isEnd()) {
+            if (node.end === true) {
                 words.push(string);
             };
         } else {
@@ -49,13 +51,4 @@ treeFunctions.print = function(root) {
     return words.length > 0 ? words : mo;
 };
 
-
-
-var Trie = function() {
-	this.root = new Node();
-};
-
-//module.exports = { treeFunctions, Trie };
-module.exports.treeFunctions = treeFunctions
-module.exports.Trie = Trie
-module.exports.Node = Node
+module.exports = treeFunctions;
