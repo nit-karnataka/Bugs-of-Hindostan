@@ -4,6 +4,8 @@ const querySchema = mongoose.Schema({
     keywords: [String],
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "user"
+        ref: "User"
     }
 });
+
+module.exports = mongoose.model('Query', querySchema);

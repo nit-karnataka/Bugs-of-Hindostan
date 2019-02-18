@@ -8,7 +8,7 @@ const userSchema = mongoose.Schema({
     name: String,
     pastQueries: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'query'
+        ref: 'Query'
     }],
     teacherOrNot: {
         type: Boolean, 
@@ -35,4 +35,4 @@ userSchema.methods.comparePassword = function(password) {
     return bcrypt.compareSync(password, this.password);
 }
 
-module.exports = mongoose.model('user', userSchema); 
+module.exports = mongoose.model('User', userSchema); 

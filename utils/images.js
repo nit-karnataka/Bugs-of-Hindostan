@@ -10,7 +10,7 @@ const storage = multer.diskStorage({
       cb(null, Date.now() + file.originalname)
     },
     fileFilter: (req, file, cb) => {
-        if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+        if (!file.originalname.match(/\.(pdf)$/)) {
             return cb(null, false);
         }
         cb(null, true);
