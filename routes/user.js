@@ -4,7 +4,6 @@ const fs = require('fs');
 const passport = require('passport');
 const models = require('../models');
 const auth = require('../utils/auth.js');
-const { upload, cloudinary } = require("../utils/images");
 
 route.post('/signup', (req,res,next) => {
      

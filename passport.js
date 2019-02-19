@@ -27,7 +27,7 @@ const localStrategy = new LocalStrategy({
     .then((user)=>{
         if(!user)
             return done(null, false, req.flash('loginMsg','User does not exists!'));
-        if(!user.comparePassword(password))
+        if(!user.comparePassword(password)) 
             return done(null, false, req.flash('loginMsg','Password Incorrect!'));
         return done(null, user, req.flash('homePgMsg', `Welcome, ${user.name}!`));
     })

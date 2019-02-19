@@ -1,6 +1,6 @@
 const route = require('express').Router();
 const models = require('../models');
-const { upload, cloudinary } = require("../utils/images");
+const { upload, cloudinary } = require("../utils/pdfs");
 
 const constructTrie = function(url) {
     return {};
@@ -10,8 +10,6 @@ const uploadPdfAndProcessPdf = function (req) {
     if(req.file) {
         return cloudinary.uploader.upload(req.file.path) 
         .then(result => {
-            console.log(result);
-            fs.unlink(req.file.path);
             return models.Pdf.create({
                 name: req.body.name,
                 dateUploaded: Date.now(),
@@ -27,7 +25,7 @@ const uploadPdfAndProcessPdf = function (req) {
 route.post('/', upload.single('pdf'), (req, res) => {
     uploadPdfAndProcessPdf(req) 
     .then(pdf => {
-        req.redirect('/success');
+        res.redirect('/success');
     })
     .catch(err => {
         console.log(err);
@@ -38,3 +36,5 @@ route.post('/', upload.single('pdf'), (req, res) => {
 route.get('/', (req, res) => {
     res.render('upload');
 })
+
+module.exports = route;
