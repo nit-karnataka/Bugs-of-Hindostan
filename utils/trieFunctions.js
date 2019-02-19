@@ -8,6 +8,7 @@ trieFunctions.add = function(node, input) {
         node.end = true;
         return;
     } else if (!node.keys.has(input[0])) {
+        console.log("Hi");
         node.keys.set(String(input[0]), new Node());
         return trieFunctions.add(node.keys.get(input[0]), input.substr(1));
     } else {
@@ -18,18 +19,17 @@ trieFunctions.add = function(node, input) {
 trieFunctions.isWord = function(root, word) {
     var node = root;
     while (word.length > 1) {
-        if (!node.keys.hasOwnProperty(word[0])) {
+        var tempNode = node.keys[word[0]];
+        if (!tempNode) {
             return false;
         } else {
-            node = node.keys[word[0]];
+            node = tempNode;
             word = word.substr(1);
         };
     };
-    if(node.keys.hasOwnProperty(word)) {
-        node = node.keys[word];
-        return (node.end === true);
-    }
-    return false;
+    node = node.keys[word];
+    if(!node) return false;
+    else return (node.end === true);
 };
 
 trieFunctions.print = function(root) {

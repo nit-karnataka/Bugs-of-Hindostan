@@ -17,6 +17,7 @@ const getWords = (filePath) => {
             data = data.split('\', \'');
             data[0] = data[0].substr(2);
             data[data.length-1] = data[data.length-1].substr(0,data[data.length-1].length-3);
+            console.log(data);
             resolve(data);
         });
     
@@ -36,10 +37,13 @@ const constructTrie = (filePath) => {
             myTrie = new Trie();
             console.log('words')
             data.forEach(word => {
+                console.log(word)
                 trieFunctions.add(myTrie.root, word);
+                console.log(trieFunctions.isWord(myTrie.root, word))
             });
             console.log("Returning Trie");
             console.log(myTrie);
+            console.log("Printing");
             trieFunctions.print(myTrie.root);
             resolve(myTrie);
         })
@@ -54,7 +58,7 @@ const constructTrie = (filePath) => {
 const uploadPdfAndProcessPdf = function (req) {
     return new Promise((resolve, reject) => {
         if(req.file) {
-            return cloudinary.uploader.upload(req.file.path) 
+            cloudinary.uploader.upload(req.file.path) 
             .then(result => {
                 console.log(result);
                 constructTrie(result.original_filename)
@@ -80,7 +84,9 @@ const uploadPdfAndProcessPdf = function (req) {
                 reject(err);
             })
         }
-        reject(new Error('No files selected'));
+        else {
+            reject(new Error('No files selected'));
+        }
     })
 } 
 
