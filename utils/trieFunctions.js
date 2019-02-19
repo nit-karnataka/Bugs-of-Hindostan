@@ -1,21 +1,21 @@
-const Node = require('./Node');
-const Trie = require('./Trie');
+let Node = require('./Node');
+let Trie = require('./Trie');
 
-const treeFunctions = {}
+let trieFunctions = {}
 
-treeFunctions.add = function(node, input) {
+trieFunctions.add = function(node, input) {
     if (input.length == 0) {
         node.end = true;
         return;
-    } else if (!node.keys.hasOwnProperty(input[0])) {
+    } else if (!node.keys.has(input[0])) {
         node.keys.set(String(input[0]), new Node());
-        return treeFunctions.add(node.keys.get(input[0]), input.substr(1));
+        return trieFunctions.add(node.keys.get(input[0]), input.substr(1));
     } else {
-        return treeFunctions.add(node.keys.get(input[0]), input.substr(1));
+        return trieFunctions.add(node.keys.get(input[0]), input.substr(1));
     };
 };
 
-treeFunctions.isWord = function(root, word) {
+trieFunctions.isWord = function(root, word) {
     var node = root;
     while (word.length > 1) {
         if (!node.keys.hasOwnProperty(word[0])) {
@@ -32,7 +32,7 @@ treeFunctions.isWord = function(root, word) {
     return false;
 };
 
-treeFunctions.print = function(root) {
+trieFunctions.print = function(root) {
     var words = new Array();
     var search = function(node, string) {
         if (node.keys.size != 0) {
@@ -48,7 +48,7 @@ treeFunctions.print = function(root) {
         };
     };
     search(root, new String());
-    return words.length > 0 ? words : mo;
+    return words.length > 0 ? words : null;
 };
 
-module.exports = treeFunctions;
+module.exports = trieFunctions;

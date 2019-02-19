@@ -1,6 +1,6 @@
-const Node = require('./Node');
+let Node = require('./Node');
 
-const Trie = function() {
+let Trie = function() {
 	this.root = new Node();
 };
 

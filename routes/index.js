@@ -12,5 +12,6 @@ route.get('/', (req,res)=>{
 // Sub Routes
 route.use('/', require('./user'));
 route.use('/upload', require('./upload'));
+route.use('/query', require('./query'));
 
 module.exports = route;

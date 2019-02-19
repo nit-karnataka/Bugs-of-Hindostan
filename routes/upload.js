@@ -5,6 +5,7 @@ const trieFunctions = require('../utils/trieFunctions');
 const Trie = require('../utils/Trie');
 
 const getWords = (filePath) => {
+    console.log('yaha aa rha h')
     return new Promise((resolve, reject) => {
         const { spawn } = require('child_process');
         const pyProg = spawn('python', ['public_static/python/getWords.py', filePath]);  
@@ -12,7 +13,6 @@ const getWords = (filePath) => {
         pyProg.stdout.on('data', (data) => {
             data = data.toString();
             data = data.split('\n');
-            data = data.splice(3);
             data = data[0];
             data = data.split('\', \'');
             data[0] = data[0].substr(2);
@@ -21,6 +21,7 @@ const getWords = (filePath) => {
         });
     
         pyProg.stderr.on('data', (err) => {
+            console.log(`python ka error: ${err}`)
             reject(err);
         })
     });
@@ -28,10 +29,12 @@ const getWords = (filePath) => {
 
 const constructTrie = (filePath) => {
     filePath = 'public_static/uploads/' + filePath + '.pdf';
+    console.log(filePath)
     return new Promise((resolve, reject) => {
         getWords(filePath)
         .then(data => {
             myTrie = new Trie();
+            console.log('words')
             data.forEach(word => {
                 trieFunctions.add(myTrie.root, word);
             });
@@ -42,6 +45,7 @@ const constructTrie = (filePath) => {
         })
         .catch(err => {
             console.log("Error aagya");
+            console.log(err)
             reject(err);
         })
     })
