@@ -6,7 +6,7 @@ const models = require('../models');
 const auth = require('../utils/auth.js');
 
 route.post('/signup', (req,res,next) => {
-     
+     console.log(req.body)
     models.User
         .findOne({email: req.body.email})
         .then(existingUser =>{
