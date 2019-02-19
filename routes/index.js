@@ -6,7 +6,7 @@ const route = express.Router();
 route.use('/', express.static(path.join(__dirname, '../public_static')));
 
 route.get('/', (req,res)=>{
-    res.render('index', {message: req.flash('homePgMsg')});
+    res.render('index', {message: req.flash('homePgSuccess')});
 });
 
 // Sub Routes

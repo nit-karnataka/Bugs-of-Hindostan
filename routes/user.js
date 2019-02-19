@@ -45,7 +45,7 @@ route.get('/login', (req,res) => {
 route.get('/logout', (req, res)=>{
     if(req.user){
         req.logout();
-        req.flash('homePgMsg', 'Successfully Logged Out!');
+        req.flash('homePgSuccess', 'Successfully Logged Out!');
     }
     res.redirect('/');
 });

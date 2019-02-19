@@ -4,5 +4,13 @@
     </head>
     <body>
         Submit Your Query
+        <form action="/query" method="post">
+            <input type="text" name="keywords" placeholder="Keywords separated by ';'">
+            <input type="email" name="selfEmail" placeholder="Your Email-ID">
+            <% if(!user.isTeacher){ %>
+                <input type="email" name="teacherEmail" placeholder="Email-ID of Faculty">
+            <% } %>
+            <button>Submit</button>
+        </form>
     </body>
 </html>
