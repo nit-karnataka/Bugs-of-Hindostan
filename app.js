@@ -41,19 +41,12 @@ app.use((req, res, next)=>{
 
 app.use('/', require('./routes'));
 
-// console.log("abc")
-// console.log(trieFunctions);
-// console.log("abc")
-
 
 // myTrie = new Trie()
-// trieFunctions.add(myTrie.root, 'ball'); 
-// trieFunctions.add(myTrie.root,'bat'); 
+// trieFunctions.add(myTrie.root, 'storag'); 
+// trieFunctions.add(myTrie.root,'sole');
 // trieFunctions.add(myTrie.root, 'doll'); 
-// console.log(trieFunctions.isWord(myTrie.root, 'doll'))
-// console.log(trieFunctions.isWord(myTrie.root, 'dor'))
-// console.log(trieFunctions.isWord(myTrie.root, 'dorf'))
-// console.log(trieFunctions.print(myTrie.root))
+// console.log(trieFunctions.print(myTrie.root));
 
 // models.Pdf.create({
 //     name: 'first',
@@ -71,9 +64,9 @@ app.use('/', require('./routes'));
 // models.Pdf.findOne({})
 // .then(pdf => {
 //     console.log(pdf);
-//     console.log(trieFunctions.isWord(pdf.trie.root, 'dolll'))
+//     console.log(trieFunctions.isWord(pdf.trie.root, 'storag'))
+//     console.log(trieFunctions.isWord(pdf.trie.root, 'sole'))
 //     console.log(trieFunctions.isWord(pdf.trie.root, 'doll'))
-//     console.log(trieFunctions.isWord(pdf.trie.root, 'ba'))
 // })
 // .catch(err => {
 //     console.log(err);

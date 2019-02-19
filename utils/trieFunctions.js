@@ -4,10 +4,13 @@ const Trie = require('./Trie');
 const treeFunctions = {}
 
 treeFunctions.add = function(node, input) {
+    console.log(node);
+    console.log(input);
     if (input.length == 0) {
         node.end = true;
         return;
-    } else if (!node.keys.hasOwnProperty(input[0])) {
+    } else if (!node.keys.has(input[0])) {
+        console.log("Hi");
         node.keys.set(String(input[0]), new Node());
         return treeFunctions.add(node.keys.get(input[0]), input.substr(1));
     } else {
@@ -18,18 +21,17 @@ treeFunctions.add = function(node, input) {
 treeFunctions.isWord = function(root, word) {
     var node = root;
     while (word.length > 1) {
-        if (!node.keys.hasOwnProperty(word[0])) {
+        var tempNode = node.keys[word[0]];
+        if (!tempNode) {
             return false;
         } else {
-            node = node.keys[word[0]];
+            node = tempNode;
             word = word.substr(1);
         };
     };
-    if(node.keys.hasOwnProperty(word)) {
-        node = node.keys[word];
-        return (node.end === true);
-    }
-    return false;
+    node = node.keys[word];
+    if(!node) return false;
+    else return (node.end === true);
 };
 
 treeFunctions.print = function(root) {
