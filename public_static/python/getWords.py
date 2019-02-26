@@ -4,7 +4,7 @@ from nltk.stem.snowball import PorterStemmer
 import PyPDF2 
 import nltk
 import sys
-nltk.download('stopwords')
+#nltk.download('stopwords')
 
 pdfFileObj = open(sys.argv[1], 'rb') 
 

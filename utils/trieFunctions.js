@@ -32,23 +32,4 @@ trieFunctions.isWord = function(root, word) {
     else return (node.end === true);
 };
 
-trieFunctions.print = function(root) {
-    var words = new Array();
-    var search = function(node, string) {
-        if (node.keys.size != 0) {
-            for (var varter of node.keys.keys()) {
-                search(node.keys.get(varter), string.concat(varter));
-            };
-            if (node.end === true) {
-                words.push(string);
-            };
-        } else {
-            string.length > 0 ? words.push(string) : undefined;
-            return;
-        };
-    };
-    search(root, new String());
-    return words.length > 0 ? words : null;
-};
-
 module.exports = trieFunctions;

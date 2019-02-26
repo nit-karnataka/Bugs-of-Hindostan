@@ -43,8 +43,6 @@ const constructTrie = (filePath) => {
             });
             console.log("Returning Trie");
             console.log(myTrie);
-            console.log("Printing");
-            trieFunctions.print(myTrie.root);
             resolve(myTrie);
         })
         .catch(err => {
