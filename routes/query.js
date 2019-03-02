@@ -31,6 +31,7 @@ route.post('/', auth.isLoggedIn, (req,res)=>{
     .then((newKeywords) => {
         let query = new models.Query()
         query.keywords = keywords
+        console.log(`Keywords: ${keywords}`)
         query.email.push(req.body.selfEmail)
         query.user = req.user._id
         query.dateUploaded = Date.now()

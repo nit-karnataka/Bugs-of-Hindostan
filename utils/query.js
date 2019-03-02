@@ -6,7 +6,35 @@ const config = require('../config');
 const confidence = (trie,newKeywords) => {
     let total = newKeywords.length
     let matched = 0
+    console.log('confi ke keywords')
+    console.log(keywords)
+    console.log(typeof keywords)
+    l = Object.keys(keywords).length
+    console.log(l)
+    for( i=0 ;i<l; i++){
+        f = 1
+        keyword = keywords[i].split(' ')
+        console.log(keyword)
+        keyword.forEach(single => {
+            console.log(single.length)
+            if(single.length > 0){
+                console.log(single)
+                if (trieFuntions.isWord(trie.root,single)){}
+                else{
+                    f = 0
+                }
+            }
+        })
+        if(f == 1){
+            console.log("matched")
+            matched++
+        }
+        else{
+            console.log("didn't match")
+        }
+    }
     newKeywords.forEach(keyword => {
+        console.log(keyword)
         if (trieFuntions.isWord(trie.root,keyword)){
             matched++
         }

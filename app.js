@@ -68,7 +68,7 @@ app.use('/', require('./routes'));
 const chalJaBhai = () => {
     return new Promise((resolve,reject)=>{
         const { spawn } = require('child_process');
-        const pyProg = spawn('py', ['public_static/python/get.py']);  
+        const pyProg = spawn('py', ['public_static/python/keywords.py']);  
         console.log('yaha0')
         pyProg.stdout.on('data', (data) => {
             data = data.toString();
@@ -76,15 +76,12 @@ const chalJaBhai = () => {
             console.log(data)
             resolve(data);
         });
-        pyProg.stdout.on('data', (data) => {
-            console.log(data.toString())
-            resolve(5)
+
+        pyProg.stderr.on('data', (err) => {
+            console.log('ye to aya')
+            console.log(err.toString())
+            reject(err);
         })
-    
-        // pyProg.stderr.on('data', (err) => {
-        //     console.log('ye to aya')
-        //     reject(err);
-        // })
     });
 }
 app.get('/python', (req,res)=>{
