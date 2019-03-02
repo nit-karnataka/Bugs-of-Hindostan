@@ -16,8 +16,8 @@ const models = require('./models');
 
 const CONFIG = require('./config');
 
-const updateTime = 15000
-const setIntervalTime = 4000
+const updateTime = 45000
+const setIntervalTime = 20000
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended : true }));
@@ -43,30 +43,27 @@ app.use((req, res, next)=>{
 
 app.use('/', require('./routes'));
 
-// setInterval(() => {
-//     models.Query.find({ lastUpdated: { $lte: Date.now() - updateTime } })
-//     .then((queries) => {
-//         console.log("Hello");
-//         console.log(Date.now())
-//         console.log(queries.length);
-//         queries.forEach(query => {
-//             console.log(query.email);
-//             queryProcess(query.keywords, query)
-//             .then(text => {
-//                 // console.log(pdfsProcessed);
-//                 console.log("PP");
-//                 console.log(query.pdfsProcessed);
-//             })
-//             .catch(err => {
-//                 console.log(err);
-//             })
-//         })
-//     })
-//     .catch(err => {
-//         console.log("Error in query finding");
-//         console.log(err);
-//     })
-// }, Number(setIntervalTime));
+setInterval(() => {
+    models.Query.find({ lastUpdated: { $lte: Date.now() - updateTime } })
+    .then((queries) => {
+        console.log(Date.now())
+        console.log(queries.length);
+        queries.forEach(query => {
+            console.log(query.email);
+            queryProcess(query.keywords, query)
+            .then(text => {
+                console.log(text);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        })
+    })
+    .catch(err => {
+        console.log("Error in query finding");
+        console.log(err);
+    })
+}, Number(setIntervalTime));
 
 app.listen(CONFIG.SERVER.PORT, ()=>{
     console.log(`Server Started at http://localhost:${CONFIG.SERVER.PORT}/`);

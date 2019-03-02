@@ -33,40 +33,40 @@ const queryProcess = (keywords, query) => {
             query.pdfsProcessed += pdfs.length 
             query.result += text
             query.lastUpdated = Date.now()
+            
+            if(text.length == 0) {
+                text = "No new Relevant resources were added during last 3 Months"
+            }
+
             string = 'Here are the results to your query.\n' +
             `Keywords: ${query.keywords}\n` + 
             'Following are the relevant articles: \n' + text
             query.save()
             .then(q => {
-                if(text.length > 0) {
-                    const transporter = nodemailer.createTransport({
-                        service: 'Gmail',
-                        auth: {
-                            user: config.MAILER.EMAIL,
-                            pass: config.MAILER.PASSWORD
-                        }
-                    });
-    
-                    const mailOptions = {
-                        to: q.email,
-                        from: config.MAILER.EMAIL,
-                        subject: 'Eureka: Results to your Query',
-                        text: string
-                    };
-    
-                    transporter.sendMail(mailOptions)
-                    .then(()=>{
-                        console.log('Mail Sent!');
-                        resolve(text);
-                    })
-                    .catch(err => {
-                        console.log(err);
-                        console.log("Mail nahi gya");
-                    })
-                }
-                else {
+                const transporter = nodemailer.createTransport({
+                    service: 'Gmail',
+                    auth: {
+                        user: config.MAILER.EMAIL,
+                        pass: config.MAILER.PASSWORD
+                    }
+                });
+
+                const mailOptions = {
+                    to: q.email,
+                    from: config.MAILER.EMAIL,
+                    subject: 'Eureka: Results to your Query',
+                    text: string
+                };
+
+                transporter.sendMail(mailOptions)
+                .then(()=>{
+                    console.log('Mail Sent!');
                     resolve(text);
-                }
+                })
+                .catch(err => {
+                    console.log(err);
+                    console.log("Mail nahi gya");
+                })
             })
             .catch(err => {
                 console.log(err);
