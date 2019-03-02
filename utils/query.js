@@ -25,6 +25,7 @@ const queryProcess = (keywords, query) => {
             threshold = 0.66 // 4/6
             text = ""   //text to be emailed
             pdfs.forEach(pdf =>{
+                console.log(`pdf name: ${pdf.name}`)
                 score = confidence(pdf.trie,keywords)
                 if (score > threshold){
                     text = text + '\n' + pdf.pdfUrl
