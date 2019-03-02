@@ -7,36 +7,34 @@ const Trie = require('../utils/Trie');
 const getWords = (filePath) => {
     return new Promise((resolve, reject) => {
         const { spawn } = require('child_process');
-        const pyProg = spawn('python', ['public_static/python/getWords.py', filePath]);  
+        const pyProg = spawn('py', ['public_static/python/get2.py', filePath]);  
         console.log('yaha0')
         pyProg.stdout.on('data', (data) => {
             data = data.toString();
             console.log('yaha')
             console.log(data)
-            // data = data.split('\n');
-            // console.log(data);
+            data = data.split(' ');
+            data.forEach(word => {
+                console.log(word)
+            })
             // data = data.splice(3);
             // console.log(data);
             // data = data[0];
             // console.log(data);
-            data = data.split('\', \'');
-            console.log('yaha2')
-            console.log(data)
-            data[0] = data[0].substr(2);
-            data[data.length-1] = data[data.length-1].substr(0,data[data.length-1].length-4);
-            console.log('yaha3')
-            console.log(data)
+            // data = data.split('\', \'');
+            // console.log('yaha2')
+            // console.log(data)
+            // data[0] = data[0].substr(2);
+            // data[data.length-1] = data[data.length-1].substr(0,data[data.length-1].length-4);
+            // console.log('yaha3')
+            // console.log(data)
             resolve(data);
         });
-        pyProg.stdout.on('data', (data) => {
-            console.log(data.toString())
-            resolve(5)
-        })
     
-        // pyProg.stderr.on('data', (err) => {
-        //     console.log('ye to aya')
-        //     reject(err);
-        // })
+        pyProg.stderr.on('data', (err) => {
+            console.log('ye to aya')
+            reject(err);
+        })
     });
 }
 
@@ -54,6 +52,8 @@ const constructTrie = (filePath) => {
         })
         .catch(err => {
             console.log("Error aagya");
+            console.log(err.toString())
+            console.log(err)
             reject(err);
         })
     })
@@ -79,6 +79,7 @@ const uploadPdfAndProcessPdf = function (req) {
                     resolve(pdf);
                 } catch(err) {
                     console.log("Error aagya upload");
+                    console.log(err)
                     reject(err);
                 }
             }

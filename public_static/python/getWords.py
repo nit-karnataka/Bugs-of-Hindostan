@@ -6,7 +6,8 @@ import nltk
 import sys
 #nltk.download('stopwords')
 
-pdfFileObj = open(sys.argv[1], 'rb') 
+pdfFileObj = sys.argv[1] 
+#pdfFileObj = './first-text (not working).pdf'
 
 def doTokenisation(text):
     tokenizer = RegexpTokenizer("[a-zA-Z]+")

@@ -1,7 +1,7 @@
-#from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
-#from pdfminer.converter import TextConverter
-#from pdfminer.layout import LAParams
-#from pdfminer.pdfpage import PDFPage
+from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+from pdfminer.converter import TextConverter
+from pdfminer.layout import LAParams
+from pdfminer.pdfpage import PDFPage
 
 from io import StringIO
 from nltk.tokenize import RegexpTokenizer
@@ -11,13 +11,11 @@ import nltk
 import sys
 
 
-# In[40]:
-
 
 def doTokenisation(text):
     tokenizer = RegexpTokenizer("[a-zA-Z]+")
     tokens = tokenizer.tokenize(text)
-    print('tokens=', tokens)
+    #print('tokens=', tokens)
     return tokens
 
 
@@ -27,7 +25,7 @@ def doTokenisation(text):
 def removeStopWords(tokens):
     sw = set(stopwords.words('english'))
     useful_tokens = [w for w in tokens if w not in sw]
-    print('\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n useful words= ', useful_tokens)
+    #print('useful words= ', useful_tokens)
     return useful_tokens
 
 
@@ -40,12 +38,8 @@ def doStemming(tokens):
     for w in tokens:
         stemmed_tokens.append(ps.stem(w))
     
-    print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAfter Stemming = " , stemmed_tokens)
+    #print("After Stemming = " , stemmed_tokens)
     return stemmed_tokens
-
-
-# In[51]:
-
 
 def allInOneFunction(text):
     tokens = doTokenisation(text)
@@ -53,9 +47,6 @@ def allInOneFunction(text):
     stemmed_tokens = doStemming(useful_tokens)
     
     return stemmed_tokens
-
-
-# In[52]:
 
 
 class PdfConverter:
@@ -88,22 +79,12 @@ class PdfConverter:
        txt_pdf.write(content.encode('utf-8'))
        txt_pdf.close()
 
+path = sys.argv[1]
 
-# In[53]:
+#print('wow')
 
-
-path = './first-text (not working).pdf'
-#path = open(sys.argv[1], 'rb') 
-
-if __name__ == '__main__':
-    pdfConverter = PdfConverter(file_path=path)
-    text = pdfConverter.convert_pdf_to_txt()
-    text = allInOneFunction(text)
-    print('\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n',text)
-
-
-# In[ ]:
-
-
-
-
+pdfConverter = PdfConverter(file_path=path)
+text = pdfConverter.convert_pdf_to_txt()
+text = allInOneFunction(text)
+strText = ' '.join(text)
+print(strText)
