@@ -65,6 +65,54 @@ app.use('/', require('./routes'));
 //     })
 // }, Number(setIntervalTime));
 
+const chalJaBhai = () => {
+    return new Promise((resolve,reject)=>{
+        const { spawn } = require('child_process');
+        const pyProg = spawn('python', ['public_static/python/get.py']);  
+        console.log('yaha0')
+        pyProg.stdout.on('data', (data) => {
+            data = data.toString();
+            console.log('yaha')
+            console.log(data)
+            // data = data.split('\n');
+            // console.log(data);
+            // data = data.splice(3);
+            // console.log(data);
+            // data = data[0];
+            // console.log(data);
+            data = data.split('\', \'');
+            console.log('yaha2')
+            console.log(data)
+            data[0] = data[0].substr(2);
+            data[data.length-1] = data[data.length-1].substr(0,data[data.length-1].length-4);
+            console.log('yaha3')
+            console.log(data)
+            resolve(data);
+        });
+        pyProg.stdout.on('data', (data) => {
+            console.log(data.toString())
+            resolve(5)
+        })
+    
+        // pyProg.stderr.on('data', (err) => {
+        //     console.log('ye to aya')
+        //     reject(err);
+        // })
+    });
+}
+app.get('/python', (req,res)=>{
+    chalJaBhai()
+    .then(noErr => {
+        console.log(noErr)
+        console.log('chal gya')
+        res.redirect('/success')
+    })
+    .catch(err=>{
+        console.log(`Err: ${err}`)
+        res.redirect('/failure')
+    })
+})
+
 app.listen(CONFIG.SERVER.PORT, ()=>{
     console.log(`Server Started at http://localhost:${CONFIG.SERVER.PORT}/`);
 })
