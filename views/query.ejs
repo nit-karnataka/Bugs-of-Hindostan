@@ -1,16 +1,32 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
-        <title>Query Submit</title>
+        <meta charset="UTF-8">
+        <title>Query</title>
+    
+        <% include ./partials/header.ejs %>
+
     </head>
     <body>
-        Submit Your Query
-        <form action="/query" method="post">
-            <input type="text" name="keywords" placeholder="Keywords separated by ';'">
-            <input type="email" name="selfEmail" placeholder="Your Email-ID">
-            <% if(!user.isTeacher){ %>
-                <input type="email" name="teacherEmail" placeholder="Email-ID of Faculty">
-            <% } %>
-            <button>Submit</button>
-        </form>
+
+        <% include ./partials/navbar.ejs %>
+        <div class="container mt-4">
+        
+            <h3 class="my-4">Submit Your Query</h3>
+            <form action="/query" method="post">
+                <div class="form-group">
+                    <input type="text" class="form-control"  name="keywords" placeholder="Keywords separated by ';'">
+                </div>
+                <div class="form-group">                 
+                    <input type="email" class="form-control"  name="selfEmail" placeholder="Your Email-ID">
+                </div>
+                <% if(!user.isTeacher){ %>
+                    <div class="form-group">
+                        <input type="email" class="form-control"  name="teacherEmail" placeholder="Email-ID of Faculty">
+                    </div>
+                <% } %>
+                <button  class="btn btn-primary" >Submit</button>
+            </form>
+        </div>
     </body>
 </html>
