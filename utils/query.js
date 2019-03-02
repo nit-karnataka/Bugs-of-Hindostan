@@ -1,5 +1,7 @@
 const trieFuntions = require('../utils/trieFunctions')
 const models = require('../models');
+const nodemailer = require('nodemailer');
+const config = require('../config');
 
 const confidence = (trie,newKeywords) => {
     let total = newKeywords.length
@@ -25,17 +27,49 @@ const queryProcess = (keywords, query) => {
             pdfs.forEach(pdf =>{
                 score = confidence(pdf.trie,keywords)
                 if (score > threshold){
-                    text = text + ' ' + pdf.pdfUrl
+                    text = text + '\n' + pdf.pdfUrl
                 }
             })
             query.pdfsProcessed += pdfs.length 
             query.result += text
             query.lastUpdated = Date.now()
+            string = 'Here are the results to your query.\n' +
+            `Keywords: ${query.keywords}\n` + 
+            'Following are the relevant articles: \n' + text
             query.save()
             .then(q => {
-                resolve(text);
+                if(text.length > 0) {
+                    const transporter = nodemailer.createTransport({
+                        service: 'Gmail',
+                        auth: {
+                            user: config.MAILER.EMAIL,
+                            pass: config.MAILER.PASSWORD
+                        }
+                    });
+    
+                    const mailOptions = {
+                        to: q.email,
+                        from: config.MAILER.EMAIL,
+                        subject: 'Eureka: Results to your Query',
+                        text: string
+                    };
+    
+                    transporter.sendMail(mailOptions)
+                    .then(()=>{
+                        console.log('Mail Sent!');
+                        resolve(text);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        console.log("Mail nahi gya");
+                    })
+                }
+                else {
+                    resolve(text);
+                }
             })
             .catch(err => {
+                console.log(err);
                 console.log("Error in  Q saving");
             })
         })
