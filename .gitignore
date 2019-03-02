@@ -3,3 +3,4 @@ config.js
 data/
 node_modules/
 todo.txt
+public_static/uploads

@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const flash = require('express-flash');
 const MongoStore = require('connect-mongo')(session);
+const queryProcess = require('./utils/query');
 
 const app = express();
 
@@ -14,6 +15,9 @@ const db = require('./db');
 const models = require('./models');
 
 const CONFIG = require('./config');
+
+const updateTime = 15000
+const setIntervalTime = 4000
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended : true }));
@@ -37,40 +41,32 @@ app.use((req, res, next)=>{
     next();
 });
 
-
-
-// myTrie = new Trie()
-// trieFunctions.add(myTrie.root, 'storag'); 
-// trieFunctions.add(myTrie.root,'sole');
-// trieFunctions.add(myTrie.root, 'doll'); 
-// console.log(trieFunctions.print(myTrie.root));
-
-// models.Pdf.create({
-//     name: 'first',
-//     dateUploaded: Date.now(),
-//     trie: myTrie
-// })
-// .then(pdf => {
-//     console.log(pdf)
-// })
-// .catch(err => {
-//     console.log("Error aagya");
-//     console.log(err);
-// })
-
-// models.Pdf.findOne({})
-// .then(pdf => {
-//     console.log(pdf);
-//     console.log(trieFunctions.isWord(pdf.trie.root, 'storag'))
-//     console.log(trieFunctions.isWord(pdf.trie.root, 'sole'))
-//     console.log(trieFunctions.isWord(pdf.trie.root, 'doll'))
-// })
-// .catch(err => {
-//     console.log(err);
-// })
-
-
 app.use('/', require('./routes'));
+
+setInterval(() => {
+    models.Query.find({ lastUpdated: { $lte: Date.now() - updateTime } })
+    .then((queries) => {
+        console.log("Hello");
+        console.log(Date.now())
+        console.log(queries.length);
+        queries.forEach(query => {
+            console.log(query.email);
+            queryProcess(query.keywords, query)
+            .then(text => {
+                // console.log(pdfsProcessed);
+                console.log("PP");
+                console.log(query.pdfsProcessed);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        })
+    })
+    .catch(err => {
+        console.log("Error in query finding");
+        console.log(err);
+    })
+}, Number(setIntervalTime));
 
 app.listen(CONFIG.SERVER.PORT, ()=>{
     console.log(`Server Started at http://localhost:${CONFIG.SERVER.PORT}/`);

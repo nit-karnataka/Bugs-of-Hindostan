@@ -1,22 +1,21 @@
-let Node = require('./Node');
-let Trie = require('./Trie');
+const Node = require('./Node');
+const Trie = require('./Trie');
 
-let trieFunctions = {}
+const treeFunctions = {}
 
-trieFunctions.add = function(node, input) {
+treeFunctions.add = function(node, input) {
     if (input.length == 0) {
         node.end = true;
         return;
     } else if (!node.keys.has(input[0])) {
-        console.log("Hi");
         node.keys.set(String(input[0]), new Node());
-        return trieFunctions.add(node.keys.get(input[0]), input.substr(1));
+        return treeFunctions.add(node.keys.get(input[0]), input.substr(1));
     } else {
-        return trieFunctions.add(node.keys.get(input[0]), input.substr(1));
+        return treeFunctions.add(node.keys.get(input[0]), input.substr(1));
     };
 };
 
-trieFunctions.isWord = function(root, word) {
+treeFunctions.isWord = function(root, word) {
     var node = root;
     while (word.length > 1) {
         var tempNode = node.keys[word[0]];
@@ -32,4 +31,23 @@ trieFunctions.isWord = function(root, word) {
     else return (node.end === true);
 };
 
-module.exports = trieFunctions;
+treeFunctions.print = function(root) {
+    var words = new Array();
+    var search = function(node, string) {
+        if (node.keys.size != 0) {
+            for (var varter of node.keys.keys()) {
+                search(node.keys.get(varter), string.concat(varter));
+            };
+            if (node.end === true) {
+                words.push(string);
+            };
+        } else {
+            string.length > 0 ? words.push(string) : undefined;
+            return;
+        };
+    };
+    search(root, new String());
+    return words.length > 0 ? words : mo;
+};
+
+module.exports = treeFunctions;
