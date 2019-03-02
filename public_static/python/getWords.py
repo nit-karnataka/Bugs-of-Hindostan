@@ -10,7 +10,6 @@ import nltk
 import sys
 
 
-nltk.download('stopwords')
 path = open(sys.argv[1], 'rb') 
 
 def doTokenisation(text):
