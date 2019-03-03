@@ -6,7 +6,7 @@ const queryProcess = require('../utils/query');
 const processKeywords = (keywords)=> {
     return new Promise((resolve,reject)=>{
         const { spawn } = require('child_process')
-        const pyProg = spawn('py', ['public_static/python/processing.py', keywords])
+        const pyProg = spawn('python', ['public_static/python/processing.py', keywords])
         console.log(":i");
         pyProg.stdout.on('data', (data) => {
             data = data.toString()
@@ -27,7 +27,7 @@ const clinicalKeyOutput = (text) => {
     return new Promise((resolve,reject)=>{
         console.log(`inside: ${text}`)
         const { spawn } = require('child_process');
-        const pyProg = spawn('py', ['public_static/python/clinicalKey.py', text]);  
+        const pyProg = spawn('python', ['public_static/python/clinicalKey.py', text]);  
         pyProg.stdout.on('data', (data) => {
             data = data.toString();
             resolve(data);

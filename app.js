@@ -74,7 +74,7 @@ setInterval(() => {
 const chalJaBhai = () => {
     return new Promise((resolve,reject)=>{
         const { spawn } = require('child_process');
-        const pyProg = spawn('py', ['public_static/python/try.py']);  
+        const pyProg = spawn('python', ['public_static/python/try.py']);  
         console.log('yaha0')
         pyProg.stdout.on('data', (data) => {
             data = data.toString();
@@ -101,6 +101,10 @@ app.get('/python', (req,res)=>{
         console.log(`Err: ${err}`)
         res.redirect('/failure')
     })
+})
+
+app.get('*', (req, res) => {
+    res.redirect('/');
 })
 
 app.listen(CONFIG.SERVER.PORT, ()=>{
