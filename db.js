@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const models = require('./models');
 
-const CONFIG = require("./config");
+const CONFIG = require("./config2");
 
 mongoose
 	.connect(`mongodb://${CONFIG.DB.HOST}:${CONFIG.DB.PORT}/${CONFIG.DB.NAME}`, { useNewUrlParser: true })

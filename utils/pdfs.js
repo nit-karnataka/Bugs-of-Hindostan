@@ -1,6 +1,6 @@
 const cloudinary = require('cloudinary');
 const multer = require('multer');
-const { CLOUDINARY } = require('../config');
+const { CLOUDINARY } = require('../config2');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
