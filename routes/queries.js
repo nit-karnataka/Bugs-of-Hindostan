@@ -8,11 +8,22 @@ route.get('/', auth.isLoggedIn, (req, res) => {
         if(queries === null) {
             throw Error('No queries found');
         }
-        res.render('queries', { queries });
+        res.render('queries', { title: 'All Queries', queries: queries });
     })
     .catch(err => {
         console.log(`Error: ${err}`);l
         res.redirect('/');
+    })
+});
+
+route.get('/:id', auth.isLoggedIn, (req, res) => {
+    models.User.findById(req.params.id)
+    .populate('pastQueries')
+    .then(user => {
+        res.render('queries', { title: 'Specific Student or Teacher', queries: user.pastQueries });
+    })
+    .catch(err => {
+        console.log(err);
     })
 });
 

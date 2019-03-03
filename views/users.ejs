@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Query</title>
+    
+        <% include ./partials/header.ejs %>
+
+    </head>
+    <body>
+
+        <% include ./partials/navbar.ejs %>
+        <div class="container mt-4">
+        
+            <h3 class="my-4"> <%= title %> </h3>
+            <!-- <form action="/query" method="post">
+                <div class="form-group">
+                    <input type="text" class="form-control"  name="keywords" placeholder="Keywords separated by ';'">
+                </div>
+                <div class="form-group">                 
+                    <input type="email" class="form-control"  name="selfEmail" placeholder="Your Email-ID">
+                </div>
+                <div id="emails">
+                    <div class="form-group">  
+                        <p> Select User </p>
+                        <select class="options" name="studentEmail[]">
+                            <option value="None">No User</option>
+                        </select>               
+                    </div>
+                    <button class=""></button>
+                </div>
+                <button type="submit" class="btn btn-primary" >Submit</button>
+            </form>
+            <button id="addBtn" class="btn btn-primary">Add more Students</button> -->
+        
+            <% users.forEach(user => { %>
+                <a href="/queries/<%= user._id %>">
+                    <h2> Name: <%= user.name %> </h2>
+                    <p> Email: <%= user.email %> </p>
+                </a>
+            <% }) %>
+        </div>
+
+        <script src="/js/query.js"></script>
+
+    </body>
+</html>
