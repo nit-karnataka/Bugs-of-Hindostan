@@ -20,7 +20,7 @@ route.get('/:id', auth.isLoggedIn, (req, res) => {
     models.User.findById(req.params.id)
     .populate('pastQueries')
     .then(user => {
-        res.render('queries', { title: 'Specific Student or Teacher', queries: user.pastQueries });
+        res.render('queries', { title: user.name, queries: user.pastQueries });
     })
     .catch(err => {
         console.log(err);

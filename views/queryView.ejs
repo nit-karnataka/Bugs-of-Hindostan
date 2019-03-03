@@ -12,7 +12,7 @@
         <% include ./partials/navbar.ejs %>
         <div class="container mt-4">
         
-            <h3 class="my-4"> Student: <%= title %> </h3>
+            <h3 class="my-4"> Query Page </h3>
             <!-- <form action="/query" method="post">
                 <div class="form-group">
                     <input type="text" class="form-control"  name="keywords" placeholder="Keywords separated by ';'">
@@ -32,19 +32,22 @@
                 <button type="submit" class="btn btn-primary" >Submit</button>
             </form>
             <button id="addBtn" class="btn btn-primary">Add more Students</button> -->
-            <% queries.forEach(query => { %>
-                <a href="/query/<%= query._id %>">
-                    <h2> Keywords: <%= query.keywords %> </h2>
-                    <p> Date Uploaded: <%= query.dateUploaded %> </p>
-                    <!-- <h3> Results mailed : </h3>
-                    <% results = query.result.split(' ') %>
-                    <% let i=1 %>
-                    <% results.forEach(result => { %>
-                        <a href="<%= result %>">Result: <%= i %></a>
-                        <% i++ %>
-                    <% }) %> -->
-                </a>
+            <h2> Keywords: <%= query.keywords %> </h2>
+            <p> Date: <%= query.dateUploaded %> </p>
+            <p> Last Updated: <%= query.lastUpdated %> </p>
+            <h3> Results mailed : </h3>
+            <% results = query.result.split(' ') %>
+            <% let i=1 %>
+            <% results.forEach(result => { %>
+                <a href="<%= result %>">Result: <%= i %></a>
+                <% i++ %>
             <% }) %>
+            <h3> Mentor: <%= query.mentor.name %> </h3>
+            <h3> Students: 
+                <% for(let i=0 ; i<query.students.length ; i++) { %>
+                    <%= query.students[i].name %> 
+                <% } %>  
+            </h3>              
         </div>
 
         <script src="/js/query.js"></script>

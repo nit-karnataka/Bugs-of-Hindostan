@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Query</title>
+        <title>Pdfs</title>
     
         <% include ./partials/header.ejs %>
 
@@ -12,7 +12,7 @@
         <% include ./partials/navbar.ejs %>
         <div class="container mt-4">
         
-            <h3 class="my-4"> Student: <%= title %> </h3>
+            <h3 class="my-4"> All Resources </h3>
             <!-- <form action="/query" method="post">
                 <div class="form-group">
                     <input type="text" class="form-control"  name="keywords" placeholder="Keywords separated by ';'">
@@ -32,18 +32,10 @@
                 <button type="submit" class="btn btn-primary" >Submit</button>
             </form>
             <button id="addBtn" class="btn btn-primary">Add more Students</button> -->
-            <% queries.forEach(query => { %>
-                <a href="/query/<%= query._id %>">
-                    <h2> Keywords: <%= query.keywords %> </h2>
-                    <p> Date Uploaded: <%= query.dateUploaded %> </p>
-                    <!-- <h3> Results mailed : </h3>
-                    <% results = query.result.split(' ') %>
-                    <% let i=1 %>
-                    <% results.forEach(result => { %>
-                        <a href="<%= result %>">Result: <%= i %></a>
-                        <% i++ %>
-                    <% }) %> -->
-                </a>
+            <% pdfs.forEach(pdf => { %>
+                <h3> <%= pdf.name %> </h3>
+                <p> Date Uploaded: <%= pdf.dateUploaded %> </p>
+                <a href="<%=pdf.pdfUrl%>">Pdf Url</a>
             <% }) %>
         </div>
 

@@ -47,6 +47,21 @@ const userSave = (mail, query) => {
 route.get('/', auth.isLoggedIn, (req,res)=>{
     res.render('query');
 })
+
+route.get('/:id', auth.isLoggedIn, (req, res) => {
+    models.Query.findById(req.params.id)
+    .populate('students')
+    .populate('mentor')
+    .then(query => {
+        console.log(query);
+        res.render('queryView', { query });
+    })
+    .catch(err => {
+        console.log(err);
+        res.redirect('back');
+    }) 
+})
+
 route.post('/', auth.isLoggedIn, (req,res)=>{
     keywords = req.body.keywords.split(';')
     processKeywords(keywords)
