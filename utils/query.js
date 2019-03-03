@@ -1,7 +1,7 @@
 const trieFuntions = require('../utils/trieFunctions')
 const models = require('../models');
 const nodemailer = require('nodemailer');
-const config = require('../config');
+const config = require('../config2');
 
 const confidence = (trie,newKeywords) => {
     let total = newKeywords.length
@@ -113,8 +113,7 @@ const queryProcess = (keywords, query) => {
                 })
                 .then(()=>{
                     console.log('time to text')
-                    return
-                    //return textMessage(query)
+                    return textMessage(query)
                 })
                 .catch(err => {
                     console.log(err);

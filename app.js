@@ -14,7 +14,7 @@ const db = require('./db');
 
 const models = require('./models');
 
-const CONFIG = require('./config');
+const CONFIG = require('./config2');
 
 const updateTime = 45000
 const setIntervalTime = 20000
