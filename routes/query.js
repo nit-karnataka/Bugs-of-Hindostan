@@ -6,7 +6,7 @@ const queryProcess = require('../utils/query');
 const processKeywords = (keywords)=> {
     return new Promise((resolve,reject)=>{
         const { spawn } = require('child_process')
-        const pyProg = spawn('py', ['public_static/python/processing.py', keywords])
+        const pyProg = spawn('python', ['public_static/python/processing.py', keywords])
         console.log(":i");
         pyProg.stdout.on('data', (data) => {
             data = data.toString()
@@ -33,6 +33,7 @@ const userSave = (mail, query) => {
         })
         .then(student => {
             console.log("Successfully Saved student");
+            console.log(student);
             resolve(student);
         })
         .catch(err => {
@@ -50,14 +51,31 @@ route.post('/', auth.isLoggedIn, (req,res)=>{
     keywords = req.body.keywords.split(';')
     processKeywords(keywords)
     .then((newKeywords) => {
+        console.log("11");
         let query = new models.Query()
         query.keywords = keywords
         console.log(`Keywords: ${keywords}`)
         console.log(req.body);
-        query.email = req.body.studentEmail
-        query.email.push(req.body.selfEmail)
+        let emails = []
+        let studentsData = req.body.studentEmail
+        studentsData.forEach(studentData => {
+            studentData = studentData.split(';');
+            emails.push(studentData[0]);
+            query.students.push(studentData[1]);
+            query.phoneNos.push(studentData[2]);
+        }) 
+        let mentorData = req.body.mentorEmail.split(';');
+        console.log(mentorData);
+        emails.push(mentorData[0]);
+        query.mentor = mentorData[1]; 
+        query.phoneNos.push(mentorData[2]);
+        query.email = emails
+        // query.email = req.body.studentEmail
         query.user = req.user._id
         query.dateUploaded = Date.now()
+
+        console.log("22");
+        console.log(query);
 
         console.log("1");
         
@@ -68,20 +86,23 @@ route.post('/', auth.isLoggedIn, (req,res)=>{
         .then(text => {
             console.log(`email: ${text}`)
             console.log("2");
+            console.log(req.user);
             return models.User.findById(req.user.id);
         })
         .then(user=> {
             console.log(user);
             user.pastQueries.push(query);
+            console.log("Pushed");
             return user.save();
         })
         .then(user=>{
             console.log("Save h");
             let promises = [];
-            mails = req.body.studentEmail
-            for(let i=0 ; i<mails.length ; i++) {
-                promises.push(userSave(mails[i], query));
+            for(let i=0 ; i<studentsData.length ; i++) {
+                console.log(studentsData[i].split(';')[0]);
+                promises.push(userSave(studentsData[i].split(';')[0], query));
             }
+            promises.push(userSave(mentorData[0], query));
             console.log("pakk")
             return Promise.all(promises);
         })

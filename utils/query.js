@@ -50,7 +50,7 @@ const textMessage = (query) => {
         .then(user=> {
             const { spawn } = require('child_process');
             phoneNo = user.phoneNo
-            const pyProg = spawn('py', ['public_static/python/msg.py', phoneNo]);  
+            const pyProg = spawn('python', ['public_static/python/msg.py', phoneNo]);  
             pyProg.stdout.on('data', (data) => {
                 data = data.toString();
                 console.log('yaha text msg')

@@ -2,8 +2,8 @@ const route = require('express').Router();
 const models = require('../../models');
 const auth = require('../../utils/auth');
 
-route.get('/', auth.isLoggedIn, (req, res) => {
-    models.User.find({ isStudent: true })
+route.get('/:id', auth.isLoggedIn, (req, res) => {
+    models.User.find({ isStudent: Number(req.params.id) })
     .then(students => {
         res.send(students);
     })

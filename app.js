@@ -68,7 +68,7 @@ app.use('/', require('./routes'));
 const chalJaBhai = () => {
     return new Promise((resolve,reject)=>{
         const { spawn } = require('child_process');
-        const pyProg = spawn('py', ['public_static/python/try.py']);  
+        const pyProg = spawn('python', ['public_static/python/try.py']);  
         console.log('yaha0')
         pyProg.stdout.on('data', (data) => {
             data = data.toString();
