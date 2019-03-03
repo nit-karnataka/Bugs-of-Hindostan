@@ -20,13 +20,21 @@
                 <div class="form-group">                 
                     <input type="email" class="form-control"  name="selfEmail" placeholder="Your Email-ID">
                 </div>
-                <% if(!user.isTeacher){ %>
-                    <div class="form-group">
-                        <input type="email" class="form-control"  name="teacherEmail" placeholder="Email-ID of Faculty">
+                <div id="emails">
+                    <div class="form-group">  
+                        <p> Select User </p>
+                        <select class="options" name="studentEmail[]">
+                            <option value="None">No User</option>
+                        </select>               
                     </div>
-                <% } %>
-                <button  class="btn btn-primary" >Submit</button>
+                    <button class=""></button>
+                </div>
+                <button type="submit" class="btn btn-primary" >Submit</button>
             </form>
+            <button id="addBtn" class="btn btn-primary">Add more Students</button>
         </div>
+
+        <script src="/js/query.js"></script>
+
     </body>
 </html>
