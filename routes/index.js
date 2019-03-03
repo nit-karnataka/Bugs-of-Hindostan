@@ -14,6 +14,7 @@ route.use('/', require('./user'));
 route.use('/upload', require('./upload'));
 route.use('/query', require('./query'));
 route.use('/queries', require('./queries'));
+route.use('/users',require('./users'));
 route.use('/api', require('./api'));
 
 module.exports = route;
