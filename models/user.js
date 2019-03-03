@@ -12,7 +12,8 @@ const userSchema = mongoose.Schema({
     isStudent: {
         type: Boolean, 
         default: false // False for Teacher
-    }
+    },
+    phoneNo : String
 }, {
     usePushEach : true
 });
