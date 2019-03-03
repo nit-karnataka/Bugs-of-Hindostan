@@ -89,7 +89,8 @@ route.post('/', auth.isLoggedIn, (req,res)=>{
     clinicalKeyOutput(text)
     .then(result => {
         processKeywords(keywords)
-        .then((newKeywords) => {
+        .then((keywords) => {
+            console.log(keywords)
             let query = new models.Query()
             let emails = []
             let studentsData = req.body.studentEmail
@@ -114,7 +115,7 @@ route.post('/', auth.isLoggedIn, (req,res)=>{
             
             query.save()
             .then(query => {
-                return queryProcess(newKeywords, query);
+                return queryProcess(keywords, query);
             })
             .then(text => {
                 console.log(`email: ${text}`)

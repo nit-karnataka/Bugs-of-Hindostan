@@ -113,7 +113,8 @@ const queryProcess = (keywords, query) => {
                 })
                 .then(()=>{
                     console.log('time to text')
-                    return textMessage(query)
+                    return
+                    //return textMessage(query)
                 })
                 .catch(err => {
                     console.log(err);
