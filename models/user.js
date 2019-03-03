@@ -10,8 +10,8 @@ const userSchema = mongoose.Schema({
         ref: 'Query'
     }],
     isTeacher: {
-        type: Boolean, 
-        default: false // False for Teacher
+        type: Number, 
+        default: 0 // False for Teacher
     }
 }, {
     usePushEach : true
