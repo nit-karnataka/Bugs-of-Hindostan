@@ -6,19 +6,12 @@ const config = require('../config');
 const confidence = (trie,newKeywords) => {
     let total = newKeywords.length
     let matched = 0
-    console.log('confi ke keywords')
-    console.log(keywords)
-    console.log(typeof keywords)
-    l = Object.keys(keywords).length
-    console.log(l)
+    l = Object.keys(newKeywords).length
     for( i=0 ;i<l; i++){
         f = 1
-        keyword = keywords[i].split(' ')
-        console.log(keyword)
+        keyword = newKeywords[i].split(' ')
         keyword.forEach(single => {
-            console.log(single.length)
             if(single.length > 0){
-                console.log(single)
                 if (trieFuntions.isWord(trie.root,single)){}
                 else{
                     f = 0
@@ -26,19 +19,9 @@ const confidence = (trie,newKeywords) => {
             }
         })
         if(f == 1){
-            console.log("matched")
             matched++
-        }
-        else{
-            console.log("didn't match")
         }
     }
-    newKeywords.forEach(keyword => {
-        console.log(keyword)
-        if (trieFuntions.isWord(trie.root,keyword)){
-            matched++
-        }
-    })
     let confi = (matched*1.0)/(total)
     return confi
 }
@@ -59,7 +42,7 @@ const textMessage = (query) => {
             });
         
             pyProg.stderr.on('data', (err) => {
-                console.log('ye to aya')
+                console.log('error in text msg')
                 console.log(err.toString());
                 reject(err);
             })
@@ -76,28 +59,36 @@ const queryProcess = (keywords, query) => {
         models.Pdf.find()
         .skip(query.pdfsProcessed)
         .then(pdfs => {
-            console.log("PC");
-            console.log(pdfs.length);
-            threshold = 0.66 // 4/6
+            threshold = 0.75 // 4/6
             text = ""   //text to be emailed
             pdfs.forEach(pdf =>{
-                console.log(`pdf name: ${pdf.name}`)
                 score = confidence(pdf.trie,keywords)
                 if (score > threshold){
                     text = text + '\n' + pdf.pdfUrl
                 }
             })
             query.pdfsProcessed += pdfs.length 
-            query.result += text
             query.lastUpdated = Date.now()
             
             if(text.length == 0) {
                 text = "No new Relevant resources were added during last 3 Months"
             }
 
+            finalResult = ''
+
+            arrayOfUrl = query.result.split(' ')
+
+            arrayOfUrl.forEach(single => {
+                finalResult = finalResult + '\n' + single 
+            })
+
             string = 'Here are the results to your query.\n' +
             `Keywords: ${query.keywords}\n` + 
-            'Following are the relevant articles: \n' + text
+            `Following are the relevant article from ClinicalKey Website: \n` +
+            finalResult + `\n` +
+            'Following are the relevant articles extracted from Local Database: \n' + text
+
+            query.result += text
             query.save()
             .then(q => {
                 const transporter = nodemailer.createTransport({
@@ -126,7 +117,7 @@ const queryProcess = (keywords, query) => {
                 })
                 .catch(err => {
                     console.log(err);
-                    console.log("Mail nahi gya");
+                    console.log("Mail not sent");
                 })
             })
             .catch(err => {
