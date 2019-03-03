@@ -97,6 +97,10 @@ app.get('/python', (req,res)=>{
     })
 })
 
+app.get('*', (req, res) => {
+    res.redirect('/');
+})
+
 app.listen(CONFIG.SERVER.PORT, ()=>{
     console.log(`Server Started at http://localhost:${CONFIG.SERVER.PORT}/`);
 })
