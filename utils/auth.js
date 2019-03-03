@@ -7,7 +7,7 @@ mwo.isLoggedIn = (req,res,next)=> {
     res.redirect('/login');
 }
 
-mwo.isTeacher = (req, res, next) => {
+mwo.isStudent = (req, res, next) => {
     if(req.isAuthenticated()) {
         console.log(req.user);
         next();

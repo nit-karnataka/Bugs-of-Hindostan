@@ -3,7 +3,7 @@ const models = require('../../models');
 const auth = require('../../utils/auth');
 
 route.get('/', auth.isLoggedIn, (req, res) => {
-    models.User.find({ isTeacher: true })
+    models.User.find({ isStudent: true })
     .then(students => {
         res.send(students);
     })

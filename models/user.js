@@ -9,7 +9,7 @@ const userSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Query'
     }],
-    isTeacher: {
+    isStudent: {
         type: Boolean, 
         default: false // False for Teacher
     }
