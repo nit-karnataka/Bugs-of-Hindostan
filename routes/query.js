@@ -51,6 +51,7 @@ const userSave = (mail, query) => {
         })
         .then(student => {
             console.log("Successfully Saved student");
+            console.log(student);
             resolve(student);
         })
         .catch(err => {
@@ -64,6 +65,21 @@ const userSave = (mail, query) => {
 route.get('/', auth.isLoggedIn, (req,res)=>{
     res.render('query');
 })
+
+route.get('/:id', auth.isLoggedIn, (req, res) => {
+    models.Query.findById(req.params.id)
+    .populate('students')
+    .populate('mentor')
+    .then(query => {
+        console.log(query);
+        res.render('queryView', { query });
+    })
+    .catch(err => {
+        console.log(err);
+        res.redirect('back');
+    }) 
+})
+
 route.post('/', auth.isLoggedIn, (req,res)=>{
     keywords = req.body.keywords.split(';')
     text = ''
@@ -75,11 +91,24 @@ route.post('/', auth.isLoggedIn, (req,res)=>{
         processKeywords(keywords)
         .then((newKeywords) => {
             let query = new models.Query()
+            let emails = []
+            let studentsData = req.body.studentEmail
+            studentsData.forEach(studentData => {
+                studentData = studentData.split(';');
+                emails.push(studentData[0]);
+                query.students.push(studentData[1]);
+                query.phoneNos.push(studentData[2]);
+            }) 
+            let mentorData = req.body.mentorEmail.split(';');
+            console.log(mentorData);
+            emails.push(mentorData[0]);
+            query.mentor = mentorData[1]; 
+            query.phoneNos.push(mentorData[2]);
+            query.email = emails
+
             query.result = result
             query.keywords = keywords
             console.log(`Keywords outside: ${keywords}`)
-            query.email = req.body.studentEmail
-            query.email.push(req.body.selfEmail)
             query.user = req.user._id
             query.dateUploaded = Date.now()
             
@@ -98,10 +127,13 @@ route.post('/', auth.isLoggedIn, (req,res)=>{
             .then(user=>{
                 console.log("Saved user");
                 let promises = [];
-                mails = req.body.studentEmail
-                for(let i=0 ; i<mails.length ; i++) {
-                    promises.push(userSave(mails[i], query));
+
+                for(let i=0 ; i<studentsData.length ; i++) {
+                    console.log(studentsData[i].split(';')[0]);
+                    promises.push(userSave(studentsData[i].split(';')[0], query));
                 }
+                promises.push(userSave(mentorData[0], query));
+                console.log("pakk")
                 return Promise.all(promises);
             })
             .then(() => {
@@ -122,5 +154,6 @@ route.post('/', auth.isLoggedIn, (req,res)=>{
         return res.redirect('/')
     })
 });
+
 
 module.exports = route;

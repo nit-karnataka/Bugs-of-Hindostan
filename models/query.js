@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const querySchema = mongoose.Schema({
     keywords: [String],
     email: [String], // in case of multiple emails as in student
+    phoneNos: [String],
     dateUploaded: Date,
     lastUpdated: {
         type: Date,
@@ -17,6 +18,14 @@ const querySchema = mongoose.Schema({
         default: ""
     },
     user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    },
+    students: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    }],
+    mentor: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     }
