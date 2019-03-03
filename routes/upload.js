@@ -7,11 +7,11 @@ const Trie = require('../utils/Trie');
 const getWords = (filePath) => {
     return new Promise((resolve, reject) => {
         const { spawn } = require('child_process');
-        const pyProg = spawn('python', ['public_static/python/get2.py', filePath]);  
-        console.log('yaha0')
+        const pyProg = spawn('py', ['public_static/python/get2.py', filePath]);  
+        //console.log('yaha0')
         pyProg.stdout.on('data', (data) => {
             data = data.toString();
-            console.log('yaha')
+            //console.log('yaha')
             data = data.split(' ');
             // data = data.splice(3);
             // console.log(data);
@@ -28,7 +28,7 @@ const getWords = (filePath) => {
         });
     
         pyProg.stderr.on('data', (err) => {
-            console.log('ye to aya')
+            console.log('Error in python')
             console.log(err.toString());
             reject(err);
         })
@@ -37,7 +37,7 @@ const getWords = (filePath) => {
 
 const constructTrie = (filePath) => {
     filePath = 'public_static/uploads/' + filePath + '.pdf';
-    console.log("Trie tak")
+    //console.log("Trie tak")
     return new Promise((resolve, reject) => {
         getWords(filePath)
         .then(data => {
@@ -48,9 +48,8 @@ const constructTrie = (filePath) => {
             resolve(myTrie);
         })
         .catch(err => {
-            console.log("Error aagya");
+            console.log("Error: ");
             console.log(err.toString())
-            console.log(err)
             reject(err);
         })
     })
@@ -63,8 +62,6 @@ const uploadPdfAndProcessPdf = function (req) {
                 try {
                     const result = await cloudinary.uploader.upload(req.file.path);
                     const mtrie = await constructTrie(result.original_filename);
-                    console.log("M trie");
-                    console.log(mtrie);
                     const pdf = await models.Pdf.create({
                         name: req.body.name,
                         dateUploaded: Date.now(),
@@ -72,10 +69,10 @@ const uploadPdfAndProcessPdf = function (req) {
                         pdfUrl: result.url,
                         trie: mtrie
                     });
-                    console.log("Pdf ban gyi");
+                    console.log("Pdf made");
                     resolve(pdf);
                 } catch(err) {
-                    console.log("Error aagya upload");
+                    console.log("Error while upload: ");
                     console.log(err)
                     reject(err);
                 }
@@ -91,7 +88,8 @@ const uploadPdfAndProcessPdf = function (req) {
 route.post('/', upload.single('pdf'), (req, res) => {
     uploadPdfAndProcessPdf(req) 
     .then(pdf => {
-        console.log(pdf);
+        console.log(`pdf saved: ${pdf.name}`)
+        //console.log(pdf);
     })
     .catch(err => {
         console.log(err);

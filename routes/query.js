@@ -6,7 +6,7 @@ const queryProcess = require('../utils/query');
 const processKeywords = (keywords)=> {
     return new Promise((resolve,reject)=>{
         const { spawn } = require('child_process')
-        const pyProg = spawn('python', ['public_static/python/processing.py', keywords])
+        const pyProg = spawn('py', ['public_static/python/processing.py', keywords])
         console.log(":i");
         pyProg.stdout.on('data', (data) => {
             data = data.toString()
@@ -18,6 +18,24 @@ const processKeywords = (keywords)=> {
     
         pyProg.stderr.on('data', (err) => {
             console.log(`python ka error: ${err}`)
+            reject(err);
+        })
+    })
+}
+
+const clinicalKeyOutput = (text) => {
+    return new Promise((resolve,reject)=>{
+        console.log(`inside: ${text}`)
+        const { spawn } = require('child_process');
+        const pyProg = spawn('py', ['public_static/python/clinicalKey.py', text]);  
+        pyProg.stdout.on('data', (data) => {
+            data = data.toString();
+            resolve(data);
+        });
+    
+        pyProg.stderr.on('data', (err) => {
+            console.log('error in clinical key')
+            console.log(err.toString());
             reject(err);
         })
     })
@@ -64,75 +82,78 @@ route.get('/:id', auth.isLoggedIn, (req, res) => {
 
 route.post('/', auth.isLoggedIn, (req,res)=>{
     keywords = req.body.keywords.split(';')
-    processKeywords(keywords)
-    .then((newKeywords) => {
-        console.log("11");
-        let query = new models.Query()
-        query.keywords = keywords
-        console.log(`Keywords: ${keywords}`)
-        console.log(req.body);
-        let emails = []
-        let studentsData = req.body.studentEmail
-        studentsData.forEach(studentData => {
-            studentData = studentData.split(';');
-            emails.push(studentData[0]);
-            query.students.push(studentData[1]);
-            query.phoneNos.push(studentData[2]);
-        }) 
-        let mentorData = req.body.mentorEmail.split(';');
-        console.log(mentorData);
-        emails.push(mentorData[0]);
-        query.mentor = mentorData[1]; 
-        query.phoneNos.push(mentorData[2]);
-        query.email = emails
-        // query.email = req.body.studentEmail
-        query.user = req.user._id
-        query.dateUploaded = Date.now()
+    text = ''
+    keywords.forEach(kw => {
+        text = text + kw + ','
+    });
+    clinicalKeyOutput(text)
+    .then(result => {
+        processKeywords(keywords)
+        .then((newKeywords) => {
+            let query = new models.Query()
+            let emails = []
+            let studentsData = req.body.studentEmail
+            studentsData.forEach(studentData => {
+                studentData = studentData.split(';');
+                emails.push(studentData[0]);
+                query.students.push(studentData[1]);
+                query.phoneNos.push(studentData[2]);
+            }) 
+            let mentorData = req.body.mentorEmail.split(';');
+            console.log(mentorData);
+            emails.push(mentorData[0]);
+            query.mentor = mentorData[1]; 
+            query.phoneNos.push(mentorData[2]);
+            query.email = emails
 
-        console.log("22");
-        console.log(query);
+            query.result = result
+            query.keywords = keywords
+            console.log(`Keywords outside: ${keywords}`)
+            query.user = req.user._id
+            query.dateUploaded = Date.now()
+            
+            query.save()
+            .then(query => {
+                return queryProcess(newKeywords, query);
+            })
+            .then(text => {
+                console.log(`email: ${text}`)
+                return models.User.findById(req.user.id);
+            })
+            .then(user=> {
+                user.pastQueries.push(query);
+                return user.save();
+            })
+            .then(user=>{
+                console.log("Saved user");
+                let promises = [];
 
-        console.log("1");
-        
-        query.save()
-        .then(query => {
-            return queryProcess(newKeywords, query);
-        })
-        .then(text => {
-            console.log(`email: ${text}`)
-            console.log("2");
-            console.log(req.user);
-            return models.User.findById(req.user.id);
-        })
-        .then(user=> {
-            console.log(user);
-            user.pastQueries.push(query);
-            console.log("Pushed");
-            return user.save();
-        })
-        .then(user=>{
-            console.log("Save h");
-            let promises = [];
-            for(let i=0 ; i<studentsData.length ; i++) {
-                console.log(studentsData[i].split(';')[0]);
-                promises.push(userSave(studentsData[i].split(';')[0], query));
-            }
-            promises.push(userSave(mentorData[0], query));
-            console.log("pakk")
-            return Promise.all(promises);
-        })
-        .then(() => {
-            //req.flash('homePgSuccess', 'Successfully submitted the query.');
-            return res.redirect('/');
+                for(let i=0 ; i<studentsData.length ; i++) {
+                    console.log(studentsData[i].split(';')[0]);
+                    promises.push(userSave(studentsData[i].split(';')[0], query));
+                }
+                promises.push(userSave(mentorData[0], query));
+                console.log("pakk")
+                return Promise.all(promises);
+            })
+            .then(() => {
+                //req.flash('homePgSuccess', 'Successfully submitted the query.');
+                return res.redirect('/');
+            })
+            .catch(err => {
+                console.log("Error in query saving");
+            })
         })
         .catch(err => {
-            console.log("Error in query saving");
+            req.flash('homePgFail', 'Error uploading query. Please try again.');
+            return res.redirect('/');   
         })
     })
-    .catch(err => {
-        req.flash('homePgFail', 'Error uploading query. Please try again.');
-        return res.redirect('/');   
+    .catch(err=> {
+        console.log(`err in outermost query level: ${err}`)
+        return res.redirect('/')
     })
 });
+
 
 module.exports = route;
