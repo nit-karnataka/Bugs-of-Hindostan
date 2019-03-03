@@ -32,9 +32,11 @@
                 <button type="submit" class="btn btn-primary" >Submit</button>
             </form>
             <button id="addBtn" class="btn btn-primary">Add more Students</button> -->
+            <% var i=1; %>
             <% queries.forEach(query => { %>
                 <a href="/query/<%= query._id %>">
-                    <h2> Keywords: <%= query.keywords %> </h2>
+                    <h2> Project  </h2>
+                    <h3> Keywords: <%= query.keywords %> </h3>
                     <p> Date Uploaded: <%= query.dateUploaded %> </p>
                     <!-- <h3> Results mailed : </h3>
                     <% results = query.result.split(' ') %>
@@ -44,6 +46,7 @@
                         <% i++ %>
                     <% }) %> -->
                 </a>
+                <% i++ %>
             <% }) %>
         </div>
 
