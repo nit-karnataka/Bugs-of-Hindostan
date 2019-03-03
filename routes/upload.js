@@ -7,7 +7,7 @@ const Trie = require('../utils/Trie');
 const getWords = (filePath) => {
     return new Promise((resolve, reject) => {
         const { spawn } = require('child_process');
-        const pyProg = spawn('py', ['public_static/python/get2.py', filePath]);  
+        const pyProg = spawn('python', ['public_static/python/get2.py', filePath]);  
         //console.log('yaha0')
         pyProg.stdout.on('data', (data) => {
             data = data.toString();

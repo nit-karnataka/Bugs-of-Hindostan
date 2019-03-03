@@ -17,6 +17,6 @@ route.use('/queries', require('./queries'));
 route.use('/users',require('./users'));
 route.use('/api', require('./api'));
 route.use('/pdfs', require('./pdfs'));
-route.use('/feedback', require('/feedback'));
+route.use('/feedback', require('./feedback'));
 
 module.exports = route;
