@@ -85,6 +85,6 @@ path = sys.argv[1]
 
 pdfConverter = PdfConverter(file_path=path)
 text = pdfConverter.convert_pdf_to_txt()
-text = allInOneFunction(text)
+text = allInOneFunction(text.lower())
 strText = ' '.join(text)
 print(strText)

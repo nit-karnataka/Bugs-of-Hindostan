@@ -12,11 +12,7 @@ const getWords = (filePath) => {
         pyProg.stdout.on('data', (data) => {
             data = data.toString();
             console.log('yaha')
-            console.log(data)
             data = data.split(' ');
-            data.forEach(word => {
-                console.log(word)
-            })
             // data = data.splice(3);
             // console.log(data);
             // data = data[0];
