@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Feedback Form</title>
+    
+        <% include ./partials/header.ejs %>
+
+    </head>
+    <body>
+
+        <% include ./partials/navbar.ejs %>
+        <div class="container mt-4">
+        
+            <h3 class="my-4">Submit Your Feedback <%= user.name %></h3>
+            <form action="/feedback" method="post">
+                <div class="form-group">
+                    <input type="text" class="form-control"  name="feedback" placeholder="Enter Feeback related to query">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control"  name="qid" value="<%= query._id%>">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control"  name="uid" value="<%= user._id%>">
+                </div>
+                <button type="submit" class="btn btn-primary" >Submit</button>
+            </form>
+            <button id="addBtn" class="btn btn-primary">Add more Students</button>
+        </div>
+
+        <script src="/js/query.js"></script>
+
+    </body>
+</html>

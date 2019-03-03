@@ -47,7 +47,10 @@
                 <% for(let i=0 ; i<query.students.length ; i++) { %>
                     <%= query.students[i].name %> 
                 <% } %>  
-            </h3>              
+            </h3> 
+            <a href="/feedback/<%=query._id%>">
+                Submit Feedback related to Query
+            </a>           
         </div>
 
         <script src="/js/query.js"></script>

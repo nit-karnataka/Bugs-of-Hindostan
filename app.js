@@ -43,27 +43,27 @@ app.use((req, res, next)=>{
 
 app.use('/', require('./routes'));
 
-// setInterval(() => {
-//     models.Query.find({ lastUpdated: { $lte: Date.now() - updateTime } })
-//     .then((queries) => {
-//         console.log(Date.now())
-//         console.log(queries.length);
-//         queries.forEach(query => {
-//             console.log(query.email);
-//             queryProcess(query.keywords, query)
-//             .then(text => {
-//                 console.log(text);
-//             })
-//             .catch(err => {
-//                 console.log(err);
-//             })
-//         })
-//     })
-//     .catch(err => {
-//         console.log("Error in query finding");
-//         console.log(err);
-//     })
-// }, Number(setIntervalTime));
+setInterval(() => {
+    models.Query.find({ lastUpdated: { $lte: Date.now() - updateTime } })
+    .then((queries) => {
+        console.log(Date.now())
+        console.log(queries.length);
+        queries.forEach(query => {
+            console.log(query.email);
+            queryProcess(query.keywords, query)
+            .then(text => {
+                console.log(text);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        })
+    })
+    .catch(err => {
+        console.log("Error in query finding");
+        console.log(err);
+    })
+}, Number(setIntervalTime));
 
 const chalJaBhai = () => {
     return new Promise((resolve,reject)=>{
