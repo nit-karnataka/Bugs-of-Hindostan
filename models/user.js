@@ -9,10 +9,11 @@ const userSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Query'
     }],
-    isTeacher: {
-        type: Number, 
-        default: 0 // False for Teacher
-    }
+    isStudent: {
+        type: Boolean, 
+        default: false // False for Teacher
+    },
+    phoneNo : String
 }, {
     usePushEach : true
 });

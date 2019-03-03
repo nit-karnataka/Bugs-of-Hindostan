@@ -14,6 +14,7 @@ route.post('/signup', (req,res,next) => {
                 req.flash('errors', 'Email already exists!');
                 return res.redirect('/signup');
             } else {
+                console.log(req.body)
                 return models.User.create(req.body)
             }
         })

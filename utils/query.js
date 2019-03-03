@@ -43,6 +43,34 @@ const confidence = (trie,newKeywords) => {
     return confi
 }
 
+const textMessage = (query) => {
+    return new Promise ((resolve, reject)=>{
+        models.User
+        .findById(query.user)
+        .then(user=> {
+            const { spawn } = require('child_process');
+            phoneNo = user.phoneNo
+            const pyProg = spawn('py', ['public_static/python/msg.py', phoneNo]);  
+            pyProg.stdout.on('data', (data) => {
+                data = data.toString();
+                console.log('yaha text msg')
+                console.log(data)
+                resolve();
+            });
+        
+            pyProg.stderr.on('data', (err) => {
+                console.log('ye to aya')
+                console.log(err.toString());
+                reject(err);
+            })
+        })
+        .catch(err=> {
+            console.log(err)
+            reject(err)
+        })
+    })
+}
+
 const queryProcess = (keywords, query) => {
     return new Promise((resolve, reject)=>{
         models.Pdf.find()
@@ -91,6 +119,10 @@ const queryProcess = (keywords, query) => {
                 .then(()=>{
                     console.log('Mail Sent!');
                     resolve(text);
+                })
+                .then(()=>{
+                    console.log('time to text')
+                    return textMessage(query)
                 })
                 .catch(err => {
                     console.log(err);
